@@ -23,9 +23,9 @@ public class Bookmark {
     }
 
     public Bookmark(Account account, String uri, String description) {
+        this.account = account;
         this.uri = uri;
         this.description = description;
-        this.account = account;
     }
 
     public String uri;
@@ -46,5 +46,4 @@ public class Bookmark {
     public String getDescription() {
         return description;
     }
-
 }

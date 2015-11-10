@@ -19,18 +19,18 @@ public class Account {
     @GeneratedValue
     private Long id;
 
-
-    Account(){
-        //jpa only
-    }
+    public String username;
 
     @JsonIgnore
     public String password;
-    public String username;
 
     public Account(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    Account(){
+        //jpa only
     }
 
     public Set<Bookmark> getBookmarks() {
