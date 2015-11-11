@@ -9,6 +9,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Collection;
 
+
+//manual test POST requests in Chrome plugin (Advanced REST client)
+// {link}  http://localhost:8080/jlong/bookmarks
+// {headersTab} Content-type: application/json; charset=utf-8
+// {payload} {"uri":"http://bookmark.com/2/TEST001","description":"TEST002"}
+
 @RestController
 @RequestMapping("/{userId}/bookmarks")
 public class BookmarkRestController {
