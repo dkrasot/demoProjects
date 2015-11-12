@@ -13,12 +13,20 @@ import tleaf.service.ContactService;
 import java.util.Map;
 
 @Controller
+//@RequestMapping("/")
 public class ContactController {
 
-    @Autowired
+//    @Autowired
     private ContactService contactService;
 
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    @Autowired
+    public ContactController(ContactService contactService) {
+        this.contactService = contactService;
+    }
+    //constructor??
+
+
+    @RequestMapping("/index")
     public String listContacts(Map<String, Object> map) {
 
         map.put("contact", new Contact());
@@ -27,7 +35,7 @@ public class ContactController {
         return "contact";
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping("/")
     public String home() {
         return "redirect:index";
     }
@@ -40,7 +48,7 @@ public class ContactController {
         return "redirect:index";
     }
 
-    @RequestMapping(value = "/delete/{contactId}", method = RequestMethod.GET)
+    @RequestMapping("/delete/{contactId}")
     public String deleteContact(@PathVariable("contactId") Integer contactId) {
 
         contactService.removeContact(contactId);
