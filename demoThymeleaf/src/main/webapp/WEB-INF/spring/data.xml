@@ -1,0 +1,85 @@
+<?xml  version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee" xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+        http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd">
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <!--hibernate version ?? 3 vs 4 vs 5 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages" />
+        <property name="defaultEncoding" value="UTF-8" />
+    </bean>
+
+    <!--MySQL dataSource config-->
+
+    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"-->
+          <!--p:driverClassName="${jdbc.driverClassName}"-->
+          <!--p:url="${jdbc.databaseurl}"-->
+          <!--p:username="${jdbc.username}"-->
+          <!--p:password="${jdbc.password}" />-->
+
+    <!--dataSource bean settings in .properties file -->
+    <!--<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"-->
+            <!--p:location="/WEB-INF/jdbc.properties"/>-->
+
+    <jdbc:embedded-database id="dataSource" type="H2">
+        <jdbc:script location="classpath:db-schema.sql"/>
+        <jdbc:script location="classpath:db-test-data.sql"/>
+    </jdbc:embedded-database>
+    <!--@Bean(destroyMethod = "shutdown")-->
+    <!--public EmbeddedDatabase dataSource() {-->
+    <!--return new EmbeddedDatabaseBuilder().-->
+    <!--setType(EmbeddedDatabaseType.H2).-->
+    <!--addScript("db-schema.sql").-->
+    <!--addScript("db-test-data.sql").-->
+    <!--build();-->
+    <!--}-->
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation">
+            <value>classpath:hibernate.cfg.xml</value>
+        </property>
+        <!--property for Hibernate 3 : <property name="configurationClass"> org.hibernate.cfg.AnnotationConfiguration -->
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.dialect">${jdbc.dialect}</prop>
+                <prop key="hibernate.connection.charSet">UTF-8</prop>
+            </props>
+        </property>
+
+    </bean>
+
+    <!--H2 with Oracle MODE-->
+
+    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">-->
+        <!--<constructor-arg>-->
+            <!--<bean class="org.springframework.jdbc.datasource.SimpleDriverDataSource">-->
+                <!--<property name="driverClass" value="org.h2.Driver" />-->
+                <!--<property name="url" value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=Oracle;TRACE_LEVEL_SYSTEM_OUT=2" />-->
+            <!--</bean>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+    <!--&lt;!&ndash; provides a H2 console to look into the db if necessary &ndash;&gt;-->
+    <!--<bean id="org.h2.tools.Server-WebServer" class="org.h2.tools.Server"-->
+          <!--factory-method="createWebServer" depends-on="dataSource"-->
+          <!--init-method="start" lazy-init="false">-->
+        <!--<constructor-arg value="-web,-webPort,11111" />-->
+    <!--</bean>-->
+</beans>
