@@ -11,13 +11,13 @@ import java.util.List;
 @Service
 public class ContactServiceImpl implements ContactService {
 
-    //@Autowired
+    @Autowired
     private ContactRepository contactRepository;
     //was autowired to private field; creating constructor..
-    @Autowired
-    public ContactServiceImpl(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
+//    @Autowired
+//    public ContactServiceImpl(ContactRepository contactRepository) {
+//        this.contactRepository = contactRepository;
+//    }
 
     @Transactional
     @Override

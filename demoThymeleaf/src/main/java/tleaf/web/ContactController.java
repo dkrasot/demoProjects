@@ -19,18 +19,16 @@ public class ContactController {
 //    @Autowired
     private ContactService contactService;
 
-    @Autowired
-    public ContactController(ContactService contactService) {
-        this.contactService = contactService;
-    }
-    //constructor??
-
+//    @Autowired
+//    public ContactController(ContactService contactService) {
+//        this.contactService = contactService;
+//    }
 
     @RequestMapping("/index")
     public String listContacts(Map<String, Object> map) {
 
         map.put("contact", new Contact());
-        map.put("contactList", contactService.listContact());
+        //map.put("contactList", contactService.listContact());
 
         return "contact";
     }
